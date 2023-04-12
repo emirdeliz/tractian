@@ -18,7 +18,7 @@ export interface PizzaChartProps {
   title: string;
 }
 
-const PizzaChartBase = ({ title, series }: PizzaChartProps) => {
+export const PizzaChart = memo(({ title, series }: PizzaChartProps) => {
   const options = {
     chart: {
       type: "pie",
@@ -35,6 +35,4 @@ const PizzaChartBase = ({ title, series }: PizzaChartProps) => {
     series,
   };
   return <HighchartsReact highcharts={Highcharts} options={options} />;
-};
-
-export const PizzaChart = memo(PizzaChartBase);
+});

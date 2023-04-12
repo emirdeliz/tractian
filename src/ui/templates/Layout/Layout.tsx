@@ -1,6 +1,6 @@
 import { Layout as LayoutAntd, Menu, MenuProps } from "antd";
 import { useRouter } from "next/router";
-import { ReactNode } from "react";
+import { ReactNode, memo } from "react";
 import * as S from "./Layout.style";
 
 export type MenuItem = Required<MenuProps>["items"][number];
@@ -11,7 +11,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-export const Layout = ({ menuItems, children }: LayoutProps) => {
+export const Layout = memo(({ menuItems, children }: LayoutProps) => {
   const router = useRouter();
   return (
     <S.Layout>
@@ -21,7 +21,7 @@ export const Layout = ({ menuItems, children }: LayoutProps) => {
             theme="dark"
             mode="inline"
             items={menuItems}
-            onClick={(e) => {
+            onClick={(_e) => {
               router.push("actives");
             }}
           />
@@ -30,4 +30,4 @@ export const Layout = ({ menuItems, children }: LayoutProps) => {
       </LayoutAntd>
     </S.Layout>
   );
-};
+});

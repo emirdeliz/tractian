@@ -1,7 +1,8 @@
 import { TitleSection } from "@/ui";
-import { BarChart } from "@/ui/atoms";
-import { Col, Row, Space, Table } from "antd";
+import { Space, Table } from "antd";
 import { memo } from "react";
+
+const { Column } = Table;
 
 const dataSource = [
   {
@@ -18,39 +19,31 @@ const dataSource = [
   },
 ];
 
-const columns = [
-  {
-    title: "Id",
-    dataIndex: "id",
-    key: "id",
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Health Score",
-    dataIndex: "healthscore",
-    key: "healthscore",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-  },
-  {
-    title: "Image",
-    dataIndex: "image",
-    key: "image",
-  },
-];
-
 const Actives = () => {
   return (
     <>
       <TitleSection>Ativos</TitleSection>
-      <Table dataSource={dataSource} columns={columns} size="small" />;
+      <Table dataSource={dataSource} size="small" pagination={false}>
+        <Column title="Id" dataIndex="id" key="id" />
+        <Column title="Nome" dataIndex="name" key="name" />
+        <Column
+          title="Pontuação de Saúde"
+          dataIndex="healthscore"
+          key="healthscore"
+        />
+        <Column title="Status" dataIndex="status" key="status" />
+        <Column
+          title="Editar"
+          dataIndex="edit"
+          key="edit"
+          render={() => (
+            <Space size="middle">
+              <a>Edit</a>
+            </Space>
+          )}
+        />
+      </Table>
+      ;
     </>
   );
 };

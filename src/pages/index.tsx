@@ -44,16 +44,16 @@ const Home = () => {
       </Head>
       <Row>
         <Col span={12}>
-          <BarChart title="Health Score" series={series} />
+          <BarChart title="Pontuação de Saúde" series={series} />
         </Col>
         <Col span={12}>
           <BarChart title="Status" series={series} />
         </Col>
         <Col span={12}>
-          <BarChart title="Total Uptime" series={series} />
+          <BarChart title="Tempo de atividade total" series={series} />
         </Col>
         <Col span={12}>
-          <BarChart title="Total Collects Uptime" series={series} />
+          <BarChart title="Tempo total de coleta" series={series} />
         </Col>
       </Row>
     </>

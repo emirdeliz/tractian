@@ -18,7 +18,7 @@ export interface BarChartProps {
   title: string;
 }
 
-const BarChartBase = ({ title, series }: BarChartProps) => {
+export const BarChart = memo(({ title, series }: BarChartProps) => {
   const options = {
     chart: {
       type: "column",
@@ -40,6 +40,4 @@ const BarChartBase = ({ title, series }: BarChartProps) => {
     series,
   };
   return <HighchartsReact highcharts={Highcharts} options={options} />;
-};
-
-export const BarChart = memo(BarChartBase);
+});

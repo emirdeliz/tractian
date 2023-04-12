@@ -6,7 +6,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
-import { ReactNode } from "react";
+import { ReactNode, memo } from "react";
 
 const getItem = (
   label: React.ReactNode,
@@ -33,7 +33,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = memo(({ children }: LayoutProps) => {
   return (
     <LayoutTemplate
       title={
@@ -49,4 +49,4 @@ export const Layout = ({ children }: LayoutProps) => {
       {children}
     </LayoutTemplate>
   );
-};
+});
