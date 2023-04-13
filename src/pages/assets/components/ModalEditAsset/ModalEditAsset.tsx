@@ -60,21 +60,21 @@ const ModalEditAsset = memo((props: ModalEditAssetProps) => {
   };
 
   const companiesOptions = useMemo(() => {
-    return props.companies.map((item) => ({
+    return props.companies?.map((item) => ({
       label: item.name,
       value: item.id,
     }));
   }, [props.companies]);
 
   const unitsOptions = useMemo(() => {
-    return props.units.map((item) => ({
+    return props.units?.map((item) => ({
       label: item.name,
       value: item.id,
     }));
   }, [props.units]);
 
   const usersOptions = useMemo(() => {
-    return props.users.map((item) => ({
+    return props.users?.map((item) => ({
       label: item.name,
       value: item.id,
     }));

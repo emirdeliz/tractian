@@ -103,7 +103,7 @@ const Assets = () => {
         <Column
           title="Usuário Atribuídos"
           render={(_, record: AssetModel) =>
-            record.assignedUserIds.map((i) => (
+            record.assignedUserIds?.map((i) => (
               <Tag key={i}>{users.find((j) => j.id === i)?.name}</Tag>
             ))
           }
