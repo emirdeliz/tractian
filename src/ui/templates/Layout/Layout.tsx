@@ -6,7 +6,6 @@ import * as S from "./Layout.style";
 export type MenuItem = Required<MenuProps>["items"][number];
 
 interface LayoutProps {
-  title: ReactNode;
   menuItems: Array<MenuItem>;
   children: ReactNode;
 }

@@ -1,19 +1,61 @@
 import { TitleSection } from "@/ui";
-import { Space, Table } from "antd";
-import { memo, useEffect, useId, useState } from "react";
+import { Space, Table, Tag } from "antd";
+import { memo, useEffect, useState } from "react";
 import ModalEditAsset from "./components/ModalEditAsset/ModalEditAsset";
-import { AssetModel } from "@/model";
-import { getAssets } from "@/service";
+import {
+  AssetModel,
+  AssetStatus,
+  CompanyModel,
+  UnitModel,
+  UserModel,
+} from "@/model";
+import { getAssets, getCompanies, getUnits, getUsers } from "@/service";
 
 const { Column } = Table;
+
+const buildStatus = (record: AssetModel) => {
+  let color;
+  let tag;
+  switch (record.status) {
+    case AssetStatus.IN_ALERT:
+      color = "yellow";
+      tag = "Em alerta";
+      break;
+    case AssetStatus.IN_DOWN_TIME:
+      color = "red";
+      tag = "Em Parada";
+      break;
+    case AssetStatus.IN_OPERATION:
+      color = "green";
+      tag = "Em Operação";
+      break;
+  }
+
+  return (
+    <Tag color={color} key={tag}>
+      {tag}
+    </Tag>
+  );
+};
 
 const Assets = () => {
   const [assetEdit, setAssetEdit] = useState<AssetModel>();
   const [assets, setAssets] = useState<Array<AssetModel>>([]);
+  const [companies, setCompanies] = useState<Array<CompanyModel>>([]);
+  const [units, setUnits] = useState<Array<UnitModel>>([]);
+  const [users, setUsers] = useState<Array<UserModel>>([]);
+
   useEffect(() => {
     (async () => {
-      const data = await getAssets();
-      setAssets(data);
+      const assetsData = await getAssets();
+      const companiesData = await getCompanies();
+      const unitsData = await getUnits();
+      const usersData = await getUsers();
+
+      setAssets(assetsData);
+      setCompanies(companiesData);
+      setUnits(unitsData);
+      setUsers(usersData);
     })();
   }, []);
 
@@ -28,23 +70,58 @@ const Assets = () => {
           dataIndex="healthscore"
           key="healthscore"
         />
-        <Column title="Status" dataIndex="status" key="status" />
+        <Column
+          title="Temperatura Máxima em Celsius"
+          render={(_, record: AssetModel) => (
+            <>{record.specifications.maxTemp}</>
+          )}
+        />
+        <Column
+          title="Potência em kWh"
+          render={(_, record: AssetModel) => <>{record.specifications.power}</>}
+        />
+        <Column
+          title="RPM"
+          render={(_, record: AssetModel) => <>{record.specifications.rpm}</>}
+        />
+        <Column
+          title="Status"
+          render={(_, record: AssetModel) => buildStatus(record)}
+        />
+        <Column
+          title="Empresa"
+          render={(_, record: AssetModel) => (
+            <>{companies.find((i) => i.id === record.companyId)?.name}</>
+          )}
+        />
+        <Column
+          title="Unidade"
+          render={(_, record: AssetModel) => (
+            <>{units.find((i) => i.id === record.unitId)?.name}</>
+          )}
+        />
+        <Column
+          title="Usuário Atribuídos"
+          render={(_, record: AssetModel) =>
+            record.assignedUserIds.map((i) => (
+              <Tag key={i}>{users.find((j) => j.id === i)?.name}</Tag>
+            ))
+          }
+        />
         <Column
           title="Editar"
-          dataIndex="edit"
-          key="edit"
-          render={(_, record) => (
+          render={(_, record: AssetModel) => (
             <Space size="middle">
-              <a onClick={() => setAssetEdit(record as AssetModel)}>Edit</a>
+              <a onClick={() => setAssetEdit(record)}>Editar</a>
             </Space>
           )}
         />
       </Table>
-      <ModalEditAsset
+      {/* <ModalEditAsset
         open={!!assetEdit}
         onOk={() => setAssetEdit(undefined)}
         onCancel={() => setAssetEdit(undefined)}
-      />
+      /> */}
     </>
   );
 };

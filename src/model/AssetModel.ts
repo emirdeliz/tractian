@@ -10,6 +10,12 @@ export interface AssetMetricsModel {
   totalUptime: number;
 }
 
+export interface AssetSpecificationsModel {
+  maxTemp: number;
+  power: number;
+  rpm: number;
+}
+
 export interface AssetModel {
   id: number;
   healthscore: number;
@@ -22,7 +28,5 @@ export interface AssetModel {
   assignedUserIds: Array<number>;
   metrics: AssetMetricsModel;
   sensors: Array<number>;
-  specifications: {
-    maxTemp: number;
-  };
+  specifications: AssetSpecificationsModel;
 }

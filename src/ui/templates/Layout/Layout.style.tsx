@@ -15,6 +15,7 @@ export const Content = styled((props) => <LayoutAntd.Content {...props} />)`
   line-height: 120px;
   color: #f2f2f2;
   background-color: #ffffff;
+  padding: 15px;
 `;
 
 export const Sider = styled((props) => <LayoutAntd.Sider {...props} />)`

@@ -45,19 +45,7 @@ export const Layout = memo(({ children }: LayoutProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <LayoutTemplate
-        title={
-          <Image
-            src="/banner.png"
-            alt="Banner Tractian"
-            width={120}
-            height={17}
-          />
-        }
-        menuItems={items}
-      >
-        {children}
-      </LayoutTemplate>
+      <LayoutTemplate menuItems={items}>{children}</LayoutTemplate>
     </>
   );
 });
