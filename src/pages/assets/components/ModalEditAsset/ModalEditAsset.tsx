@@ -5,8 +5,7 @@ import {
   UnitModel,
   UserModel,
 } from "@/model";
-import { NumericInput } from "@/ui/atoms";
-import { Form, Input, Modal, Select } from "antd";
+import { Col, Form, Input, InputNumber, Modal, Row, Select } from "antd";
 import { memo, useEffect, useMemo, useState } from "react";
 
 interface ModalEditAssetProps {
@@ -47,9 +46,11 @@ const ModalEditAsset = memo((props: ModalEditAssetProps) => {
       ...props.assetSelected,
       healthscore,
       name,
-      maxTemp,
-      power,
-      rpm,
+      specifications: {
+        maxTemp,
+        power,
+        rpm,
+      },
       companyId: company,
       assignedUserIds: assignedUsers,
       unitId: unit,
@@ -87,42 +88,78 @@ const ModalEditAsset = memo((props: ModalEditAssetProps) => {
       onOk={updateAsset}
     >
       <Form layout="vertical">
-        <Form.Item label="Nome">
-          <Input value={name} onChange={(e) => setName(e.target.value)} />
-        </Form.Item>
-        <Form.Item label="Pontuação de Saúde">
-          <NumericInput
-            value={healthscore}
-            onChange={(v) => setHealthscore(v)}
-          />
-        </Form.Item>
-        <Form.Item label="Temperatura Máxima em Celsius">
-          <NumericInput value={maxTemp} onChange={(v) => setMaxTemp(v)} />
-        </Form.Item>
-        <Form.Item label="Potência em kWh">
-          <NumericInput value={power} onChange={(v) => setPower(v)} />
-        </Form.Item>
-        <Form.Item label="RPM">
-          <NumericInput value={rpm} onChange={(v) => setRpm(v)} />
-        </Form.Item>
-        <Form.Item label="Status">
-          <Select
-            value={status}
-            options={[
-              { value: AssetStatus.IN_ALERT, label: "Em Alerta" },
-              { value: AssetStatus.IN_OPERATION, label: "Em operação" },
-              { value: AssetStatus.IN_DOWN_TIME, label: "Inativo" },
-            ]}
-            onChange={(e) => setStatus(e)}
-          />
-        </Form.Item>
-        <Form.Item label="Empresa">
-          <Select
-            value={company}
-            options={companiesOptions}
-            onChange={(e) => setCompany(e)}
-          />
-        </Form.Item>
+        <Row>
+          <Col span={24}>
+            <Form.Item label="Nome">
+              <Input value={name} onChange={(e) => setName(e.target.value)} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={14}>
+            <Form.Item label="Pontuação de Saúde">
+              <InputNumber
+                value={healthscore}
+                decimalSeparator=","
+                onChange={(v) => setHealthscore(v || undefined)}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={10}>
+            <Form.Item label="Temperatura Máxima (C)">
+              <InputNumber
+                value={maxTemp}
+                decimalSeparator=","
+                onChange={(v) => setMaxTemp(v || undefined)}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={14}>
+            <Form.Item label="Potência em kWh">
+              <InputNumber
+                value={power}
+                decimalSeparator=","
+                onChange={(v) => setPower(v || undefined)}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={10}>
+            <Form.Item label="RPM">
+              <InputNumber
+                value={rpm}
+                decimalSeparator=","
+                onChange={(v) => setRpm(v || undefined)}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={10}>
+            <Form.Item label="Status">
+              <Select
+                value={status}
+                options={[
+                  { value: AssetStatus.IN_ALERT, label: "Em alerta" },
+                  { value: AssetStatus.IN_OPERATION, label: "Em operação" },
+                  { value: AssetStatus.IN_DOWN_TIME, label: "Em parada" },
+                ]}
+                onChange={(e) => setStatus(e)}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={4} />
+          <Col span={10}>
+            <Form.Item label="Empresa">
+              <Select
+                value={company}
+                options={companiesOptions}
+                onChange={(e) => setCompany(e)}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
         <Form.Item label="Unidade">
           <Select
             value={unit}
