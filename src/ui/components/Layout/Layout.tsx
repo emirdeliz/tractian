@@ -1,10 +1,12 @@
 import { Layout as LayoutTemplate, MenuItem } from "@/ui";
 import {
+  HomeOutlined,
   BankOutlined,
   PieChartOutlined,
   CodeSandboxOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import Head from "next/head";
 import Image from "next/image";
 import { ReactNode, memo } from "react";
 
@@ -23,7 +25,8 @@ const getItem = (
 };
 
 const items = [
-  getItem("Ativos", "actives", <PieChartOutlined />),
+  getItem("Home", "home", <HomeOutlined />),
+  getItem("Ativos", "assets", <PieChartOutlined />),
   getItem("Unidades", "units", <BankOutlined />),
   getItem("Empresas", "companies", <CodeSandboxOutlined />),
   getItem("Usuários", "users", <UserOutlined />),
@@ -35,18 +38,26 @@ interface LayoutProps {
 
 export const Layout = memo(({ children }: LayoutProps) => {
   return (
-    <LayoutTemplate
-      title={
-        <Image
-          src="/banner.png"
-          alt="Banner Tractian"
-          width={120}
-          height={17}
-        />
-      }
-      menuItems={items}
-    >
-      {children}
-    </LayoutTemplate>
+    <>
+      <Head>
+        <title>Tractian Challenge</title>
+        <meta name="description" content="Tractian Challenge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <LayoutTemplate
+        title={
+          <Image
+            src="/banner.png"
+            alt="Banner Tractian"
+            width={120}
+            height={17}
+          />
+        }
+        menuItems={items}
+      >
+        {children}
+      </LayoutTemplate>
+    </>
   );
 });

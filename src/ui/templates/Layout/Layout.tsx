@@ -21,8 +21,8 @@ export const Layout = memo(({ menuItems, children }: LayoutProps) => {
             theme="dark"
             mode="inline"
             items={menuItems}
-            onClick={(_e) => {
-              router.push("actives");
+            onClick={(e) => {
+              router.push(e.key);
             }}
           />
         </S.Sider>
