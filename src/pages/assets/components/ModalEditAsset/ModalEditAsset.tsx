@@ -1,19 +1,25 @@
-import { CompanyModel, UnitModel, UserModel } from "@/model";
+import {
+  AssetModel,
+  AssetStatus,
+  CompanyModel,
+  UnitModel,
+  UserModel,
+} from "@/model";
 import { NumericInput } from "@/ui/atoms";
 import { Form, Input, Modal, Select } from "antd";
-import { useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 
 interface ModalEditAssetProps {
-  open: boolean;
+  assetSelected?: AssetModel;
   companies: Array<CompanyModel>;
   units: Array<UnitModel>;
   users: Array<UserModel>;
-  onOk: () => void;
+  onOk: (asset: AssetModel) => void;
   onCancel: () => void;
 }
 
-const ModalEditAsset = (props: ModalEditAssetProps) => {
-  const [healthScore, setHealthScore] = useState<number>();
+const ModalEditAsset = memo((props: ModalEditAssetProps) => {
+  const [healthscore, setHealthscore] = useState<number>();
   const [name, setName] = useState<string>();
   const [maxTemp, setMaxTemp] = useState<number>();
   const [power, setPower] = useState<number>();
@@ -22,149 +28,120 @@ const ModalEditAsset = (props: ModalEditAssetProps) => {
   const [assignedUsers, setAssignedUsers] = useState<Array<number>>();
   const [unit, setUnit] = useState<number>();
   const [status, setStatus] = useState<string>();
+  const { assetSelected } = props;
+
+  useEffect(() => {
+    setHealthscore(assetSelected?.healthscore);
+    setName(assetSelected?.name);
+    setMaxTemp(assetSelected?.specifications?.maxTemp);
+    setPower(assetSelected?.specifications?.power);
+    setRpm(assetSelected?.specifications?.rpm);
+    setCompany(assetSelected?.companyId);
+    setAssignedUsers(assetSelected?.assignedUserIds);
+    setUnit(assetSelected?.unitId);
+    setStatus(assetSelected?.status);
+  }, [assetSelected]);
+
+  const updateAsset = () => {
+    const asset = {
+      ...props.assetSelected,
+      healthscore,
+      name,
+      maxTemp,
+      power,
+      rpm,
+      companyId: company,
+      assignedUserIds: assignedUsers,
+      unitId: unit,
+      status,
+    } as AssetModel;
+    props.onOk(asset);
+  };
+
+  const companiesOptions = useMemo(() => {
+    return props.companies.map((item) => ({
+      label: item.name,
+      value: item.id,
+    }));
+  }, [props.companies]);
+
+  const unitsOptions = useMemo(() => {
+    return props.units.map((item) => ({
+      label: item.name,
+      value: item.id,
+    }));
+  }, [props.units]);
+
+  const usersOptions = useMemo(() => {
+    return props.users.map((item) => ({
+      label: item.name,
+      value: item.id,
+    }));
+  }, [props.users]);
 
   return (
-    <Modal title="Editar Ativo" {...props}>
+    <Modal
+      title="Editar Ativo"
+      {...props}
+      open={!!assetSelected}
+      onOk={updateAsset}
+    >
       <Form layout="vertical">
-        <Form.Item
-          label="Nome"
-          name="name"
-          rules={[{ required: true, message: "Favor informe um nome" }]}
-        >
+        <Form.Item label="Nome">
           <Input value={name} onChange={(e) => setName(e.target.value)} />
         </Form.Item>
-        <Form.Item
-          label="Pontuação de Saúde"
-          name="healthscore"
-          rules={[
-            { required: true, message: "Favor informe a Pontuação de Saúde" },
-          ]}
-        >
+        <Form.Item label="Pontuação de Saúde">
           <NumericInput
-            value={healthScore}
-            onChange={(v) => setHealthScore(v)}
+            value={healthscore}
+            onChange={(v) => setHealthscore(v)}
           />
         </Form.Item>
-        <Form.Item
-          label="Temperatura Máxima em Celsius"
-          name="maxTemp"
-          rules={[
-            {
-              required: true,
-              message: "Favor informe a Temperatura Máxima em Celsius",
-            },
-          ]}
-        >
+        <Form.Item label="Temperatura Máxima em Celsius">
           <NumericInput value={maxTemp} onChange={(v) => setMaxTemp(v)} />
         </Form.Item>
-        <Form.Item
-          label="Potência em kWh"
-          name="power"
-          rules={[
-            {
-              required: true,
-              message: "Favor informe a Potência em kWh",
-            },
-          ]}
-        >
+        <Form.Item label="Potência em kWh">
           <NumericInput value={power} onChange={(v) => setPower(v)} />
         </Form.Item>
-        <Form.Item
-          label="RPM"
-          name="rpm"
-          rules={[
-            {
-              required: true,
-              message: "Favor informe o RPM",
-            },
-          ]}
-        >
+        <Form.Item label="RPM">
           <NumericInput value={rpm} onChange={(v) => setRpm(v)} />
         </Form.Item>
-        <Form.Item
-          label="Status"
-          name="status"
-          rules={[
-            {
-              required: true,
-              message: "Favor informe o status",
-            },
-          ]}
-        >
+        <Form.Item label="Status">
           <Select
             value={status}
             options={[
-              { value: "inAlert", label: "Em Alerta" },
-              {
-                value: "inOperation",
-                label: "Em operação",
-              },
-              { value: "inDowntime", label: "Inativo" },
+              { value: AssetStatus.IN_ALERT, label: "Em Alerta" },
+              { value: AssetStatus.IN_OPERATION, label: "Em operação" },
+              { value: AssetStatus.IN_DOWN_TIME, label: "Inativo" },
             ]}
             onChange={(e) => setStatus(e)}
           />
         </Form.Item>
-        <Form.Item
-          label="Empresa"
-          name="company"
-          rules={[
-            {
-              required: true,
-              message: "Favor informe a empresa",
-            },
-          ]}
-        >
+        <Form.Item label="Empresa">
           <Select
             value={company}
-            options={props.companies}
+            options={companiesOptions}
             onChange={(e) => setCompany(e)}
           />
         </Form.Item>
-        <Form.Item
-          label="Unidade"
-          name="unit"
-          rules={[
-            {
-              required: true,
-              message: "Favor informe a unidade",
-            },
-          ]}
-        >
+        <Form.Item label="Unidade">
           <Select
             value={unit}
-            options={props.units}
+            options={unitsOptions}
             onChange={(e) => setUnit(e)}
           />
         </Form.Item>
-        <Form.Item
-          label="Usuário Atribuídos"
-          name="assignedUsers"
-          rules={[
-            {
-              required: true,
-              message: "Favor informe o usuários atribuídos",
-            },
-          ]}
-        >
+        <Form.Item label="Usuário Atribuídos">
           <Select
             mode="multiple"
             allowClear
-            options={props.users}
+            value={assignedUsers}
+            options={usersOptions}
             onChange={(e) => setAssignedUsers(e)}
           />
         </Form.Item>
       </Form>
     </Modal>
   );
-};
-
-[
-  { value: "inAlert", label: "Em Alerta" },
-  {
-    value: "inOperation",
-    label: "Em operação",
-  },
-  { value: "inDowntime", label: "Inativo" },
-];
+});
 
 export default ModalEditAsset;

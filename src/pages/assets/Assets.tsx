@@ -117,11 +117,20 @@ const Assets = () => {
           )}
         />
       </Table>
-      {/* <ModalEditAsset
-        open={!!assetEdit}
-        onOk={() => setAssetEdit(undefined)}
+      <ModalEditAsset
+        companies={companies}
+        units={units}
+        users={users}
+        assetSelected={assetEdit}
+        onOk={(asset) => {
+          const assetsUpdated = assets.map((item) => {
+            return item.id === asset.id ? asset : item;
+          });
+          setAssetEdit(undefined);
+          setAssets(assetsUpdated);
+        }}
         onCancel={() => setAssetEdit(undefined)}
-      /> */}
+      />
     </>
   );
 };
