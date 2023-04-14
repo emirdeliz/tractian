@@ -2,8 +2,8 @@ import { memo, useEffect, useMemo, useState } from "react";
 import { Col, Row } from "antd";
 import { BarChart, BarChartSerieProps } from "@/ui";
 import { AssetModel } from "@/model";
-import { getAssets } from "@/service";
 import { TitleSection } from "@/ui";
+import { useAsset } from "@/hooks";
 
 const buildSeries = (
   assets: Array<AssetModel>,
@@ -24,14 +24,15 @@ const buildSeries = (
   return series;
 };
 
-export const HomePage = () => {
+export const HomePage = memo(() => {
   const [assets, setAssets] = useState<Array<AssetModel>>([]);
+  const { getAssets } = useAsset();
   useEffect(() => {
     (async () => {
       const assetsData = await getAssets();
       setAssets(assetsData);
     })();
-  }, []);
+  }, [getAssets]);
 
   const seriesHealthScore = useMemo(() => {
     const series = buildSeries(assets, (data) => ({
@@ -79,4 +80,4 @@ export const HomePage = () => {
       </Row>
     </>
   );
-};
+});

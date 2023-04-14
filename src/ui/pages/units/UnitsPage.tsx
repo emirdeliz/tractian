@@ -1,19 +1,20 @@
+import { useUnit } from "@/hooks";
 import { UnitModel } from "@/model";
-import { getCompanies, getUnits } from "@/service";
 import { TitleSection } from "@/ui";
 import { Table } from "antd";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 const { Column } = Table;
 
-export const UnitsPage = () => {
+export const UnitsPage = memo(() => {
   const [units, setUnits] = useState<Array<UnitModel>>([]);
+  const { getUnits } = useUnit();
   useEffect(() => {
     (async () => {
       const data = await getUnits();
       setUnits(data);
     })();
-  }, []);
+  }, [getUnits]);
 
   return (
     <>
@@ -22,17 +23,7 @@ export const UnitsPage = () => {
         <Column title="Id" dataIndex="id" key="id" />
         <Column title="Nome" dataIndex="name" key="name" />
         <Column title="Empresa" dataIndex="companyId" key="companyId" />
-        {/* <Column
-          title="Editar"
-          dataIndex="edit"
-          key="edit"
-          render={(_, record) => (
-            <Space size="middle">
-              <a onClick={() => setAssetEdit(record as AssetModel)}>Edit</a>
-            </Space>
-          )}
-        /> */}
       </Table>
     </>
   );
-};
+});

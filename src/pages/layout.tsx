@@ -36,7 +36,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-export const Layout = memo(({ children }: LayoutProps) => {
+const Layout = memo(({ children }: LayoutProps) => {
   return (
     <>
       <Head>
@@ -49,3 +49,5 @@ export const Layout = memo(({ children }: LayoutProps) => {
     </>
   );
 });
+
+export default Layout;

@@ -1,19 +1,21 @@
+import { useUser } from "@/hooks";
 import { CompanyModel } from "@/model";
-import { getUsers } from "@/service";
 import { TitleSection } from "@/ui";
 import { Table } from "antd";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 const { Column } = Table;
 
-export const UsersPage = () => {
+export const UsersPage = memo(() => {
   const [companies, setUsers] = useState<Array<CompanyModel>>([]);
+  const { getUsers } = useUser();
+
   useEffect(() => {
     (async () => {
       const data = await getUsers();
       setUsers(data);
     })();
-  }, []);
+  }, [getUsers]);
 
   return (
     <>
@@ -24,17 +26,7 @@ export const UsersPage = () => {
         <Column title="E-mail" dataIndex="email" key="email" />
         <Column title="Unidade" dataIndex="unitId" key="unitId" />
         <Column title="Empresa" dataIndex="companyId" key="companyId" />
-        {/* <Column
-          title="Editar"
-          dataIndex="edit"
-          key="edit"
-          render={(_, record) => (
-            <Space size="middle">
-              <a onClick={() => setAssetEdit(record as AssetModel)}>Edit</a>
-            </Space>
-          )}
-        /> */}
       </Table>
     </>
   );
-};
+});

@@ -1,5 +1,6 @@
-import { Layout } from "./layout";
+import Layout from "./layout";
 import GlobalStyle from "./global.style";
+import { Loading, LoadingProvider } from "@/ui";
 
 interface MainProps {
   Component: () => JSX.Element;
@@ -8,10 +9,13 @@ interface MainProps {
 
 const Main = ({ Component, pageProps }: MainProps) => {
   return (
-    <Layout>
-      <GlobalStyle />
-      <Component {...pageProps} />
-    </Layout>
+    <LoadingProvider>
+      <Loading />
+      <Layout>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </Layout>
+    </LoadingProvider>
   );
 };
 

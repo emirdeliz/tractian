@@ -1,19 +1,20 @@
+import { useCompany } from "@/hooks";
 import { CompanyModel } from "@/model";
-import { getCompanies } from "@/service";
 import { TitleSection } from "@/ui";
 import { Table } from "antd";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 const { Column } = Table;
 
-export const CompaniesPage = () => {
+export const CompaniesPage = memo(() => {
   const [companies, setCompanies] = useState<Array<CompanyModel>>([]);
+  const { getCompanies } = useCompany();
   useEffect(() => {
     (async () => {
       const data = await getCompanies();
       setCompanies(data);
     })();
-  }, []);
+  }, [getCompanies]);
 
   return (
     <>
@@ -21,17 +22,7 @@ export const CompaniesPage = () => {
       <Table dataSource={companies} size="small" pagination={false} rowKey="id">
         <Column title="Id" dataIndex="id" key="id" />
         <Column title="Nome" dataIndex="name" key="name" />
-        {/* <Column
-          title="Editar"
-          dataIndex="edit"
-          key="edit"
-          render={(_, record) => (
-            <Space size="middle">
-              <a onClick={() => setAssetEdit(record as AssetModel)}>Edit</a>
-            </Space>
-          )}
-        /> */}
       </Table>
     </>
   );
-};
+});

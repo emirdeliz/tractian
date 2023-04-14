@@ -8,7 +8,7 @@ import {
   UnitModel,
   UserModel,
 } from "@/model";
-import { getAssets, getCompanies, getUnits, getUsers } from "@/service";
+import { useAsset, useCompany, useUnit, useUser } from "@/hooks";
 import ModalEditAsset from "./components/ModalEditAsset/ModalEditAsset";
 
 const { Column } = Table;
@@ -38,12 +38,17 @@ const buildStatus = (record: AssetModel) => {
   );
 };
 
-export const AssetsPage = () => {
+export const AssetsPage = memo(() => {
   const [assetEdit, setAssetEdit] = useState<AssetModel>();
   const [assets, setAssets] = useState<Array<AssetModel>>([]);
   const [companies, setCompanies] = useState<Array<CompanyModel>>([]);
   const [units, setUnits] = useState<Array<UnitModel>>([]);
   const [users, setUsers] = useState<Array<UserModel>>([]);
+
+  const { getAssets } = useAsset();
+  const { getCompanies } = useCompany();
+  const { getUnits } = useUnit();
+  const { getUsers } = useUser();
 
   useEffect(() => {
     (async () => {
@@ -57,7 +62,7 @@ export const AssetsPage = () => {
       setUnits(unitsData);
       setUsers(usersData);
     })();
-  }, []);
+  }, [getAssets, getCompanies, getUnits, getUsers]);
 
   return (
     <>
@@ -133,4 +138,4 @@ export const AssetsPage = () => {
       />
     </>
   );
-};
+});

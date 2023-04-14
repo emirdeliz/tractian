@@ -15,14 +15,16 @@
     "@types/react-dom": "18.0.11",
     "@types/styled-components": "^5.1.26",
     "antd": "^5.4.2",
-    "eslint": "8.38.0",
-    "eslint-config-next": "13.3.0",
     "highcharts": "^10.3.3",
     "highcharts-react-official": "^3.2.0",
     "next": "13.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "^5.3.9",
+    "styled-components": "^5.3.9"
+  },
+  "devDependencies": {
+    "eslint": "8.38.0",
+    "eslint-config-next": "13.3.0",
     "typescript": "5.0.4"
   }
 }
