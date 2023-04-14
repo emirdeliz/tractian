@@ -1,7 +1,6 @@
 import { TitleSection } from "@/ui";
 import { Space, Table, Tag } from "antd";
 import { memo, useEffect, useState } from "react";
-import ModalEditAsset from "./components/ModalEditAsset/ModalEditAsset";
 import {
   AssetModel,
   AssetStatus,
@@ -10,6 +9,7 @@ import {
   UserModel,
 } from "@/model";
 import { getAssets, getCompanies, getUnits, getUsers } from "@/service";
+import ModalEditAsset from "./components/ModalEditAsset/ModalEditAsset";
 
 const { Column } = Table;
 
@@ -38,7 +38,7 @@ const buildStatus = (record: AssetModel) => {
   );
 };
 
-const Assets = () => {
+export const AssetsPage = () => {
   const [assetEdit, setAssetEdit] = useState<AssetModel>();
   const [assets, setAssets] = useState<Array<AssetModel>>([]);
   const [companies, setCompanies] = useState<Array<CompanyModel>>([]);
@@ -134,5 +134,3 @@ const Assets = () => {
     </>
   );
 };
-
-export default memo(Assets);

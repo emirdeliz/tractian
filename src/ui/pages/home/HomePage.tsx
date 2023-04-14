@@ -1,6 +1,6 @@
-import { Col, Row } from "antd";
-import { BarChart, BarChartSerieProps } from "@/ui/atoms";
 import { memo, useEffect, useMemo, useState } from "react";
+import { Col, Row } from "antd";
+import { BarChart, BarChartSerieProps } from "@/ui";
 import { AssetModel } from "@/model";
 import { getAssets } from "@/service";
 import { TitleSection } from "@/ui";
@@ -24,7 +24,7 @@ const buildSeries = (
   return series;
 };
 
-const Home = () => {
+export const HomePage = () => {
   const [assets, setAssets] = useState<Array<AssetModel>>([]);
   useEffect(() => {
     (async () => {
@@ -80,5 +80,3 @@ const Home = () => {
     </>
   );
 };
-
-export default memo(Home);

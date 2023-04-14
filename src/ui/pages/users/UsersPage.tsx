@@ -1,26 +1,29 @@
 import { CompanyModel } from "@/model";
-import { getCompanies } from "@/service";
+import { getUsers } from "@/service";
 import { TitleSection } from "@/ui";
 import { Table } from "antd";
 import { useEffect, useState } from "react";
 
 const { Column } = Table;
 
-const Companies = () => {
-  const [companies, setCompanies] = useState<Array<CompanyModel>>([]);
+export const UsersPage = () => {
+  const [companies, setUsers] = useState<Array<CompanyModel>>([]);
   useEffect(() => {
     (async () => {
-      const data = await getCompanies();
-      setCompanies(data);
+      const data = await getUsers();
+      setUsers(data);
     })();
   }, []);
 
   return (
     <>
-      <TitleSection>Empresas</TitleSection>
+      <TitleSection>Usuários</TitleSection>
       <Table dataSource={companies} size="small" pagination={false} rowKey="id">
         <Column title="Id" dataIndex="id" key="id" />
         <Column title="Nome" dataIndex="name" key="name" />
+        <Column title="E-mail" dataIndex="email" key="email" />
+        <Column title="Unidade" dataIndex="unitId" key="unitId" />
+        <Column title="Empresa" dataIndex="companyId" key="companyId" />
         {/* <Column
           title="Editar"
           dataIndex="edit"
@@ -35,5 +38,3 @@ const Companies = () => {
     </>
   );
 };
-
-export default Companies;

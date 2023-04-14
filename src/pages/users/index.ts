@@ -1,1 +1,2 @@
-export { default } from "./Users";
+import { UsersPage } from "@/ui";
+export default UsersPage;

@@ -1,28 +1,26 @@
-import { CompanyModel } from "@/model";
-import { getUsers } from "@/service";
+import { UnitModel } from "@/model";
+import { getCompanies, getUnits } from "@/service";
 import { TitleSection } from "@/ui";
 import { Table } from "antd";
 import { useEffect, useState } from "react";
 
 const { Column } = Table;
 
-const Users = () => {
-  const [companies, setUsers] = useState<Array<CompanyModel>>([]);
+export const UnitsPage = () => {
+  const [units, setUnits] = useState<Array<UnitModel>>([]);
   useEffect(() => {
     (async () => {
-      const data = await getUsers();
-      setUsers(data);
+      const data = await getUnits();
+      setUnits(data);
     })();
   }, []);
 
   return (
     <>
-      <TitleSection>Usuários</TitleSection>
-      <Table dataSource={companies} size="small" pagination={false} rowKey="id">
+      <TitleSection>Unidades</TitleSection>
+      <Table dataSource={units} size="small" pagination={false} rowKey="id">
         <Column title="Id" dataIndex="id" key="id" />
         <Column title="Nome" dataIndex="name" key="name" />
-        <Column title="E-mail" dataIndex="email" key="email" />
-        <Column title="Unidade" dataIndex="unitId" key="unitId" />
         <Column title="Empresa" dataIndex="companyId" key="companyId" />
         {/* <Column
           title="Editar"
@@ -38,5 +36,3 @@ const Users = () => {
     </>
   );
 };
-
-export default Users;

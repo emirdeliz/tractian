@@ -1,6 +1,5 @@
-import { Layout } from "@/ui/components";
+import { Layout } from "./layout";
 import GlobalStyle from "./global.style";
-import { Space } from "antd";
 
 interface MainProps {
   Component: () => JSX.Element;

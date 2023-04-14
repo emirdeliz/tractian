@@ -1,1 +1,2 @@
-export { default } from "./Units";
+import { UnitsPage } from "@/ui";
+export default UnitsPage;
