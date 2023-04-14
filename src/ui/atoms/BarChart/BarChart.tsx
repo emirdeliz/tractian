@@ -16,9 +16,10 @@ export interface BarChartSerieProps {
 export interface BarChartProps {
   series: Array<BarChartSerieProps>;
   title: string;
+  formatter?: (x: number, y: number) => string;
 }
 
-export const BarChart = memo(({ title, series }: BarChartProps) => {
+export const BarChart = memo(({ title, series, formatter }: BarChartProps) => {
   const options = {
     chart: {
       type: "column",
@@ -38,6 +39,12 @@ export const BarChart = memo(({ title, series }: BarChartProps) => {
       text: title,
     },
     series,
+    tooltip: {
+      formatter: function () {
+        const self = this as any;
+        return formatter ? formatter(self.x, self.y) : self.y;
+      },
+    },
   };
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 });

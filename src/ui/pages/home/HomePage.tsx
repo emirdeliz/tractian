@@ -1,28 +1,15 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import { Col, Row } from "antd";
-import { BarChart, BarChartSerieProps } from "@/ui";
+import { BarChart } from "@/ui";
 import { AssetModel } from "@/model";
 import { TitleSection } from "@/ui";
 import { useAsset } from "@/hooks";
-
-const buildSeries = (
-  assets: Array<AssetModel>,
-  getData: (data: AssetModel) => any
-) => {
-  const data = assets.map((item) => {
-    return getData(item);
-  });
-
-  const series = [
-    {
-      name: " ",
-      colorByPoint: true,
-      data,
-    },
-  ] as Array<BarChartSerieProps>;
-
-  return series;
-};
+import {
+  buildAllSeries,
+  formatterHealthScore,
+  formatterStatus,
+  formatterTotalUptime,
+} from "./HomePage.controller";
 
 export const HomePage = memo(() => {
   const [assets, setAssets] = useState<Array<AssetModel>>([]);
@@ -34,27 +21,13 @@ export const HomePage = memo(() => {
     })();
   }, [getAssets]);
 
-  const seriesHealthScore = useMemo(() => {
-    const series = buildSeries(assets, (data) => ({
-      name: data.name,
-      y: data.healthscore,
-    }));
-    return series;
-  }, [assets]);
-
-  const seriesTotalCollectsUptime = useMemo(() => {
-    const series = buildSeries(assets, (data) => ({
-      name: data.name,
-      y: data.metrics.totalCollectsUptime,
-    }));
-    return series;
-  }, [assets]);
-
-  const seriesTotalUptime = useMemo(() => {
-    const series = buildSeries(assets, (data) => ({
-      name: data.name,
-      y: data.metrics.totalUptime,
-    }));
+  const {
+    seriesHealthScore,
+    seriesTotalCollectsUptime,
+    seriesTotalUptime,
+    seriesTotalStatus,
+  } = useMemo(() => {
+    const series = buildAllSeries(assets);
     return series;
   }, [assets]);
 
@@ -63,18 +36,31 @@ export const HomePage = memo(() => {
       <TitleSection>Home</TitleSection>
       <Row>
         <Col span={12}>
-          <BarChart title="Pontuação de Saúde" series={seriesHealthScore} />
+          <BarChart
+            title="Pontuação de Saúde"
+            series={seriesHealthScore}
+            formatter={formatterHealthScore}
+          />
         </Col>
         <Col span={12}>
           <BarChart
             title="Tempo de atividade total"
             series={seriesTotalUptime}
+            formatter={formatterTotalUptime}
           />
         </Col>
         <Col span={12}>
           <BarChart
             title="Tempo total de coleta"
             series={seriesTotalCollectsUptime}
+            formatter={formatterTotalUptime}
+          />
+        </Col>
+        <Col span={12}>
+          <BarChart
+            title="Status"
+            series={seriesTotalStatus}
+            formatter={formatterStatus}
           />
         </Col>
       </Row>

@@ -45,7 +45,12 @@ const Layout = memo(({ children }: LayoutProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <LayoutTemplate menuItems={items}>{children}</LayoutTemplate>
+      <LayoutTemplate
+        menuItems={items}
+        title={<Image src="banner.svg" alt="Banner" width={150} height={70} />}
+      >
+        {children}
+      </LayoutTemplate>
     </>
   );
 });
