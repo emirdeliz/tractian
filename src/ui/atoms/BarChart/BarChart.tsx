@@ -1,6 +1,6 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { memo } from "react";
+import { memo, useEffect, useRef } from "react";
 
 export interface BarChartSerieDataProps {
   name: string;
@@ -46,5 +46,14 @@ export const BarChart = memo(({ title, series, formatter }: BarChartProps) => {
       },
     },
   };
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  const chartRef = useRef<any>(null);
+  useEffect(() => {
+    setTimeout(() => {
+      chartRef.current?.chart.reflow();
+    }, 300);
+  }, []);
+
+  return (
+    <HighchartsReact ref={chartRef} highcharts={Highcharts} options={options} />
+  );
 });
