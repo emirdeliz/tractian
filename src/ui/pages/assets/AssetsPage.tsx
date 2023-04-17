@@ -9,7 +9,7 @@ import {
   UserModel,
 } from "@/model";
 import { useAsset, useCompany, useUnit, useUser } from "@/hooks";
-import ModalEditAsset from "./components/ModalEditAsset/ModalEditAsset";
+import { ModalEditAsset } from "./components";
 
 const { Column } = Table;
 
@@ -126,10 +126,10 @@ export const AssetsPage = memo(() => {
         companies={companies}
         units={units}
         users={users}
-        assetSelected={assetEdit}
-        onOk={(asset) => {
+        initialData={assetEdit}
+        onOk={(data) => {
           const assetsUpdated = assets.map((item) => {
-            return item.id === asset.id ? asset : item;
+            return item.id === data.id ? data : item;
           });
           setAssetEdit(undefined);
           setAssets(assetsUpdated);

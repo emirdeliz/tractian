@@ -5,11 +5,12 @@ import {
   UnitModel,
   UserModel,
 } from "@/model";
-import { Col, Form, Input, InputNumber, Modal, Row, Select } from "antd";
+import { ModalEdit, ModalEditBaseProps } from "@/ui/templates";
+import { Input, InputNumber, Select } from "antd";
 import { memo, useEffect, useMemo, useState } from "react";
 
-interface ModalEditAssetProps {
-  assetSelected?: AssetModel;
+interface ModalEditAssetProps extends ModalEditBaseProps<AssetModel> {
+  initialData?: AssetModel;
   companies: Array<CompanyModel>;
   units: Array<UnitModel>;
   users: Array<UserModel>;
@@ -17,7 +18,7 @@ interface ModalEditAssetProps {
   onCancel: () => void;
 }
 
-const ModalEditAsset = memo((props: ModalEditAssetProps) => {
+export const ModalEditAsset = memo((props: ModalEditAssetProps) => {
   const [healthscore, setHealthscore] = useState<number>();
   const [name, setName] = useState<string>();
   const [maxTemp, setMaxTemp] = useState<number>();
@@ -27,23 +28,23 @@ const ModalEditAsset = memo((props: ModalEditAssetProps) => {
   const [assignedUsers, setAssignedUsers] = useState<Array<number>>();
   const [unit, setUnit] = useState<number>();
   const [status, setStatus] = useState<string>();
-  const { assetSelected } = props;
+  const { initialData } = props;
 
   useEffect(() => {
-    setHealthscore(assetSelected?.healthscore);
-    setName(assetSelected?.name);
-    setMaxTemp(assetSelected?.specifications?.maxTemp);
-    setPower(assetSelected?.specifications?.power);
-    setRpm(assetSelected?.specifications?.rpm);
-    setCompany(assetSelected?.companyId);
-    setAssignedUsers(assetSelected?.assignedUserIds);
-    setUnit(assetSelected?.unitId);
-    setStatus(assetSelected?.status);
-  }, [assetSelected]);
+    setHealthscore(initialData?.healthscore);
+    setName(initialData?.name);
+    setMaxTemp(initialData?.specifications?.maxTemp);
+    setPower(initialData?.specifications?.power);
+    setRpm(initialData?.specifications?.rpm);
+    setCompany(initialData?.companyId);
+    setAssignedUsers(initialData?.assignedUserIds);
+    setUnit(initialData?.unitId);
+    setStatus(initialData?.status);
+  }, [initialData]);
 
   const updateAsset = () => {
     const asset = {
-      ...props.assetSelected,
+      ...props.initialData,
       healthscore,
       name,
       specifications: {
@@ -80,105 +81,116 @@ const ModalEditAsset = memo((props: ModalEditAssetProps) => {
     }));
   }, [props.users]);
 
+  const fields = [
+    {
+      label: "Nome",
+      span: 24,
+      field: <Input value={name} onChange={(e) => setName(e.target.value)} />,
+    },
+    {
+      label: "Pontuação de Saúde",
+      span: 12,
+      field: (
+        <InputNumber
+          value={healthscore}
+          decimalSeparator=","
+          onChange={(v) => setHealthscore(v || undefined)}
+        />
+      ),
+    },
+    {
+      label: "Temperatura Máxima (C)",
+      span: 12,
+      field: (
+        <InputNumber
+          value={maxTemp}
+          decimalSeparator=","
+          onChange={(v) => setMaxTemp(v || undefined)}
+        />
+      ),
+    },
+    {
+      label: "Potência em kWh",
+      span: 12,
+      field: (
+        <InputNumber
+          value={power}
+          decimalSeparator=","
+          onChange={(v) => setPower(v || undefined)}
+        />
+      ),
+    },
+    {
+      label: "RPM",
+      span: 12,
+      field: (
+        <InputNumber
+          value={rpm}
+          decimalSeparator=","
+          onChange={(v) => setRpm(v || undefined)}
+        />
+      ),
+    },
+    {
+      label: "Status",
+      span: 24,
+      field: (
+        <Select
+          value={status}
+          options={[
+            { value: AssetStatus.IN_ALERT, label: "Em alerta" },
+            { value: AssetStatus.IN_OPERATION, label: "Em operação" },
+            { value: AssetStatus.IN_DOWN_TIME, label: "Em parada" },
+          ]}
+          onChange={(e) => setStatus(e)}
+        />
+      ),
+    },
+    {
+      label: "Empresa",
+      span: 24,
+      field: (
+        <Select
+          value={company}
+          options={companiesOptions}
+          onChange={(e) => setCompany(e)}
+        />
+      ),
+    },
+    {
+      label: "Unidade",
+      span: 24,
+      field: (
+        <Select
+          value={unit}
+          options={unitsOptions}
+          onChange={(e) => setUnit(e)}
+        />
+      ),
+    },
+    {
+      label: "Usuário Atribuídos",
+      span: 24,
+      field: (
+        <Select
+          mode="multiple"
+          allowClear
+          value={assignedUsers}
+          options={usersOptions}
+          onChange={(e) => setAssignedUsers(e)}
+        />
+      ),
+    },
+  ];
+
   return (
-    <Modal
+    <ModalEdit
       title="Editar Ativo"
       {...props}
-      open={!!assetSelected}
+      open={!!initialData}
       onOk={updateAsset}
     >
-      <Form layout="vertical">
-        <Row>
-          <Col span={24}>
-            <Form.Item label="Nome">
-              <Input value={name} onChange={(e) => setName(e.target.value)} />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={14}>
-            <Form.Item label="Pontuação de Saúde">
-              <InputNumber
-                value={healthscore}
-                decimalSeparator=","
-                onChange={(v) => setHealthscore(v || undefined)}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={10}>
-            <Form.Item label="Temperatura Máxima (C)">
-              <InputNumber
-                value={maxTemp}
-                decimalSeparator=","
-                onChange={(v) => setMaxTemp(v || undefined)}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={14}>
-            <Form.Item label="Potência em kWh">
-              <InputNumber
-                value={power}
-                decimalSeparator=","
-                onChange={(v) => setPower(v || undefined)}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={10}>
-            <Form.Item label="RPM">
-              <InputNumber
-                value={rpm}
-                decimalSeparator=","
-                onChange={(v) => setRpm(v || undefined)}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={10}>
-            <Form.Item label="Status">
-              <Select
-                value={status}
-                options={[
-                  { value: AssetStatus.IN_ALERT, label: "Em alerta" },
-                  { value: AssetStatus.IN_OPERATION, label: "Em operação" },
-                  { value: AssetStatus.IN_DOWN_TIME, label: "Em parada" },
-                ]}
-                onChange={(e) => setStatus(e)}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={4} />
-          <Col span={10}>
-            <Form.Item label="Empresa">
-              <Select
-                value={company}
-                options={companiesOptions}
-                onChange={(e) => setCompany(e)}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Form.Item label="Unidade">
-          <Select
-            value={unit}
-            options={unitsOptions}
-            onChange={(e) => setUnit(e)}
-          />
-        </Form.Item>
-        <Form.Item label="Usuário Atribuídos">
-          <Select
-            mode="multiple"
-            allowClear
-            value={assignedUsers}
-            options={usersOptions}
-            onChange={(e) => setAssignedUsers(e)}
-          />
-        </Form.Item>
-      </Form>
-    </Modal>
+      {fields}
+    </ModalEdit>
   );
 });
-
-export default ModalEditAsset;

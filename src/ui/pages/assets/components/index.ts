@@ -1,1 +1,1 @@
-export { default } from "./ModalEditAsset/ModalEditAsset";
+export * from "./ModalEditAsset/ModalEditAsset";
