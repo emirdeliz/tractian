@@ -3,8 +3,10 @@ import { ModalEdit, ModalEditBaseProps } from "@/ui/templates";
 import { Input, Select } from "antd";
 import { memo, useEffect, useMemo, useState } from "react";
 
-interface ModalEditUnitProps extends ModalEditBaseProps<UnitModel> {
+interface ModalEditUnitProps
+  extends Omit<ModalEditBaseProps<UnitModel>, "onConfirm"> {
   companies: Array<CompanyModel>;
+  onOk: (data: UnitModel) => void;
 }
 
 export const ModalEditUnit = memo((props: ModalEditUnitProps) => {
@@ -57,7 +59,7 @@ export const ModalEditUnit = memo((props: ModalEditUnitProps) => {
       title="Editar Unidade"
       {...props}
       open={!!initialData}
-      onOk={updateData}
+      onConfirm={updateData}
     >
       {fields}
     </ModalEdit>

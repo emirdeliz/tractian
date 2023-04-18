@@ -9,7 +9,7 @@ export interface ModalEditFieldProps {
 
 export interface ModalEditBaseProps<T> {
   initialData?: T;
-  onOk: (data: T) => void;
+  onConfirm: () => void;
   onCancel: () => void;
 }
 
@@ -23,11 +23,11 @@ export const ModalEdit = <T extends any>({
   title,
   children,
   open,
-  onOk,
+  onConfirm,
   onCancel,
 }: ModalEditProps<T>) => {
   const updateData = () => {
-    onOk();
+    onConfirm();
   };
 
   return (

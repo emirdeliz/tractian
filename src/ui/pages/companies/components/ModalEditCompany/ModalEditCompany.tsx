@@ -3,40 +3,43 @@ import { ModalEdit, ModalEditBaseProps } from "@/ui/templates";
 import { Input } from "antd";
 import { memo, useEffect, useState } from "react";
 
-export const ModalEditCompany = memo(
-  (props: ModalEditBaseProps<CompanyModel>) => {
-    const [name, setName] = useState<string>();
-    const { initialData } = props;
+interface ModalEditCompanyProps
+  extends Omit<ModalEditBaseProps<CompanyModel>, "onConfirm"> {
+  onOk: (data: CompanyModel) => void;
+}
 
-    useEffect(() => {
-      setName(initialData?.name);
-    }, [initialData]);
+export const ModalEditCompany = memo((props: ModalEditCompanyProps) => {
+  const [name, setName] = useState<string>();
+  const { initialData } = props;
 
-    const updateData = () => {
-      const update = {
-        ...props.initialData,
-        name,
-      } as CompanyModel;
-      props.onOk(update);
-    };
+  useEffect(() => {
+    setName(initialData?.name);
+  }, [initialData]);
 
-    const fields = [
-      {
-        label: "Nome",
-        span: 24,
-        field: <Input value={name} onChange={(e) => setName(e.target.value)} />,
-      },
-    ];
+  const updateData = () => {
+    const update = {
+      ...props.initialData,
+      name,
+    } as CompanyModel;
+    props.onOk(update);
+  };
 
-    return (
-      <ModalEdit<CompanyModel>
-        title="Editar Empresa"
-        {...props}
-        open={!!initialData}
-        onOk={updateData}
-      >
-        {fields}
-      </ModalEdit>
-    );
-  }
-);
+  const fields = [
+    {
+      label: "Nome",
+      span: 24,
+      field: <Input value={name} onChange={(e) => setName(e.target.value)} />,
+    },
+  ];
+
+  return (
+    <ModalEdit<CompanyModel>
+      title="Editar Empresa"
+      {...props}
+      open={!!initialData}
+      onConfirm={updateData}
+    >
+      {fields}
+    </ModalEdit>
+  );
+});

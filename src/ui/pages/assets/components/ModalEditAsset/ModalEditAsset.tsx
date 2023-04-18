@@ -9,13 +9,13 @@ import { ModalEdit, ModalEditBaseProps } from "@/ui/templates";
 import { Input, InputNumber, Select } from "antd";
 import { memo, useEffect, useMemo, useState } from "react";
 
-interface ModalEditAssetProps extends ModalEditBaseProps<AssetModel> {
+interface ModalEditAssetProps
+  extends Omit<ModalEditBaseProps<AssetModel>, "onConfirm"> {
   initialData?: AssetModel;
   companies: Array<CompanyModel>;
   units: Array<UnitModel>;
   users: Array<UserModel>;
   onOk: (asset: AssetModel) => void;
-  onCancel: () => void;
 }
 
 export const ModalEditAsset = memo((props: ModalEditAssetProps) => {
@@ -188,7 +188,7 @@ export const ModalEditAsset = memo((props: ModalEditAssetProps) => {
       title="Editar Ativo"
       {...props}
       open={!!initialData}
-      onOk={updateAsset}
+      onConfirm={updateAsset}
     >
       {fields}
     </ModalEdit>
